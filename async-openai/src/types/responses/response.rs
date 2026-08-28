@@ -807,6 +807,10 @@ pub struct CreateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<bool>,
 
+    /// Context management configuration for this request.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_management: Option<Vec<ContextManagementParam>>,
+
     /// The conversation that this response belongs to. Items from this conversation are prepended to
     ///  `input_items` for this response request.
     ///
@@ -3502,11 +3506,11 @@ pub struct FunctionShellToolParam {
 
 /// Context management configuration.
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub struct ContextManagementParam {
-    /// The context management strategy type.
-    #[serde(rename = "type")]
-    pub type_: String,
-    /// Minimum number of tokens to retain before compacting.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub compact_threshold: Option<u32>,
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum ContextManagementParam {
+    Compaction {
+        /// When the rendered token count crosses the configured threshold, the server runs server-side compaction
+        #[serde(skip_serializing_if = "Option::is_none")]
+        compact_threshold: Option<u32>,
+    },
 }
