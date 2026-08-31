@@ -184,7 +184,8 @@ pub enum ResponseStreamEvent {
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseAudioDeltaEvent {
     /// A sequence number for this chunk of the stream response.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// A chunk of Base64 encoded response audio bytes.
     pub delta: String,
 }
@@ -193,7 +194,8 @@ pub struct ResponseAudioDeltaEvent {
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseAudioDoneEvent {
     /// The sequence number of the delta.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The ID of the response associated with this event.
     pub response_id: String,
 }
@@ -204,7 +206,8 @@ pub struct ResponseAudioTranscriptDeltaEvent {
     /// The partial transcript of the audio response.
     pub delta: String,
     /// The sequence number of this event.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The ID of the response associated with this event.
     pub response_id: String,
 }
@@ -213,44 +216,51 @@ pub struct ResponseAudioTranscriptDeltaEvent {
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseAudioTranscriptDoneEvent {
     /// The sequence number of this event.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The ID of the response associated with this event.
     pub response_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCreatedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub response: Response,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub response: Response,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub response: Response,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseFailedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub response: Response,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseIncompleteEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub response: Response,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseOutputItemAddedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     /// The output item that was added. For reasoning items, `encrypted_content`
     /// may be incomplete while the item is in progress. Use the reasoning item
@@ -261,14 +271,16 @@ pub struct ResponseOutputItemAddedEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseOutputItemDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item: OutputItem,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseContentPartAddedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -277,7 +289,8 @@ pub struct ResponseContentPartAddedEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseContentPartDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -286,7 +299,8 @@ pub struct ResponseContentPartDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseTextDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -297,7 +311,8 @@ pub struct ResponseTextDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseTextDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -307,7 +322,8 @@ pub struct ResponseTextDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseRefusalDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -316,7 +332,8 @@ pub struct ResponseRefusalDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseRefusalDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -325,7 +342,8 @@ pub struct ResponseRefusalDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseFunctionCallArgumentsDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub delta: String,
@@ -335,7 +353,8 @@ pub struct ResponseFunctionCallArgumentsDeltaEvent {
 pub struct ResponseFunctionCallArgumentsDoneEvent {
     /// <https://github.com/64bit/async-openai/issues/472>
     pub name: Option<String>,
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub arguments: String,
@@ -343,49 +362,56 @@ pub struct ResponseFunctionCallArgumentsDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseFileSearchCallInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseFileSearchCallSearchingEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseFileSearchCallCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseWebSearchCallInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseWebSearchCallSearchingEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseWebSearchCallCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseReasoningSummaryPartAddedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub summary_index: u32,
@@ -394,7 +420,8 @@ pub struct ResponseReasoningSummaryPartAddedEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseReasoningSummaryPartDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub summary_index: u32,
@@ -407,7 +434,8 @@ pub struct ResponseReasoningSummaryPartDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseReasoningSummaryTextDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub summary_index: u32,
@@ -416,7 +444,8 @@ pub struct ResponseReasoningSummaryTextDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseReasoningSummaryTextDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub summary_index: u32,
@@ -425,7 +454,8 @@ pub struct ResponseReasoningSummaryTextDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseReasoningTextDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -434,7 +464,8 @@ pub struct ResponseReasoningTextDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseReasoningTextDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
     pub content_index: u32,
@@ -443,28 +474,32 @@ pub struct ResponseReasoningTextDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseImageGenCallCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseImageGenCallGeneratingEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseImageGenCallInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseImageGenCallPartialImageEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub partial_image_index: u32,
@@ -488,7 +523,8 @@ pub struct ResponseImageGenCallPartialImageEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPCallArgumentsDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub delta: String,
@@ -496,7 +532,8 @@ pub struct ResponseMCPCallArgumentsDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPCallArgumentsDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub arguments: String,
@@ -504,70 +541,80 @@ pub struct ResponseMCPCallArgumentsDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPCallCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPCallFailedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPCallInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPListToolsCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPListToolsFailedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseMCPListToolsInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCodeInterpreterCallInProgressEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCodeInterpreterCallInterpretingEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCodeInterpreterCallCompletedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCodeInterpreterCallCodeDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub delta: String,
@@ -575,7 +622,8 @@ pub struct ResponseCodeInterpreterCallCodeDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCodeInterpreterCallCodeDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub code: String,
@@ -583,7 +631,8 @@ pub struct ResponseCodeInterpreterCallCodeDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseOutputTextAnnotationAddedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub content_index: u32,
     pub annotation_index: u32,
@@ -593,13 +642,15 @@ pub struct ResponseOutputTextAnnotationAddedEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseQueuedEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub response: Response,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCustomToolCallInputDeltaEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub delta: String,
@@ -607,7 +658,8 @@ pub struct ResponseCustomToolCallInputDeltaEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseCustomToolCallInputDoneEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub output_index: u32,
     pub item_id: String,
     pub input: String,
@@ -615,7 +667,8 @@ pub struct ResponseCustomToolCallInputDoneEvent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ResponseErrorEvent {
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     pub code: Option<String>,
     pub message: String,
     pub param: Option<String>,
@@ -625,7 +678,8 @@ pub struct ResponseErrorEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ResponseShellCallCommandAddedStreamingEvent {
     /// The sequence number of the event that was emitted.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The index of the output item that was updated.
     pub output_index: u32,
     /// The index of the shell command that was added.
@@ -638,7 +692,8 @@ pub struct ResponseShellCallCommandAddedStreamingEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ResponseShellCallCommandDeltaStreamingEvent {
     /// The sequence number of the event that was emitted.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The index of the output item that was updated.
     pub output_index: u32,
     /// The index of the shell command that was updated.
@@ -654,7 +709,8 @@ pub struct ResponseShellCallCommandDeltaStreamingEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ResponseShellCallCommandDoneStreamingEvent {
     /// The sequence number of the event that was emitted.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The index of the output item that was updated.
     pub output_index: u32,
     /// The index of the shell command that was completed.
@@ -667,7 +723,8 @@ pub struct ResponseShellCallCommandDoneStreamingEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ResponseShellCallOutputContentDeltaStreamingEvent {
     /// The sequence number of the event that was emitted.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The ID of the output item that was updated.
     pub item_id: String,
     /// The index of the output item that was updated.
@@ -682,7 +739,8 @@ pub struct ResponseShellCallOutputContentDeltaStreamingEvent {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ResponseShellCallOutputContentDoneStreamingEvent {
     /// The sequence number of the event that was emitted.
-    pub sequence_number: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<u64>,
     /// The ID of the output item that was updated.
     pub item_id: String,
     /// The index of the output item that was updated.
