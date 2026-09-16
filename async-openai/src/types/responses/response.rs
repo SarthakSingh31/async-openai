@@ -2054,6 +2054,9 @@ pub struct ReasoningTextContent {
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ReasoningItemContent {
+    /// Also accepts `output_text`, which is how proxies that bridge chat completions to
+    /// the Responses API (e.g. LiteLLM) tag reasoning text.
+    #[serde(alias = "output_text")]
     ReasoningText(ReasoningTextContent),
 }
 
@@ -2062,7 +2065,9 @@ pub enum ReasoningItemContent {
 pub struct ReasoningItem {
     /// Unique identifier of the reasoning content.
     pub id: Option<String>,
-    /// Reasoning summary content.
+    /// Reasoning summary content. Defaults to empty: an `output_item.added` for a reasoning
+    /// item from a bridging proxy carries no summary yet.
+    #[serde(default)]
     pub summary: Vec<SummaryPart>,
     /// Reasoning text content.
     #[serde(skip_serializing_if = "Option::is_none")]
