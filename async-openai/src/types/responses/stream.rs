@@ -414,6 +414,7 @@ pub struct ResponseReasoningSummaryPartAddedEvent {
     pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
+    #[serde(default)]
     pub summary_index: u32,
     pub part: SummaryPart,
 }
@@ -424,6 +425,7 @@ pub struct ResponseReasoningSummaryPartDoneEvent {
     pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
+    #[serde(default)]
     pub summary_index: u32,
     pub part: SummaryPart,
     /// The completion status of the summary part. Omitted when the part completed
@@ -438,6 +440,7 @@ pub struct ResponseReasoningSummaryTextDeltaEvent {
     pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
+    #[serde(default)]
     pub summary_index: u32,
     pub delta: String,
 }
@@ -448,6 +451,7 @@ pub struct ResponseReasoningSummaryTextDoneEvent {
     pub sequence_number: Option<u64>,
     pub item_id: String,
     pub output_index: u32,
+    #[serde(default)]
     pub summary_index: u32,
     pub text: String,
 }

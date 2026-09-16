@@ -2045,7 +2045,9 @@ pub enum OutputContent {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct ReasoningTextContent {
-    /// The reasoning text from the model.
+    /// The reasoning text from the model. Also read from `reasoning`, the key a chat-completion
+    /// bridge (LiteLLM) uses for the same part.
+    #[serde(alias = "reasoning")]
     pub text: String,
 }
 
