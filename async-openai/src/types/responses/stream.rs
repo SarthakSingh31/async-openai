@@ -178,6 +178,13 @@ pub enum ResponseStreamEvent {
     ResponseShellCallOutputContentDelta(ResponseShellCallOutputContentDeltaStreamingEvent),
     #[serde(rename = "response.shell_call_output_content.done")]
     ResponseShellCallOutputContentDone(ResponseShellCallOutputContentDoneStreamingEvent),
+    /// Any event type this crate does not model yet (e.g. provider-native
+    /// `keepalive` heartbeats). Deserializing it must not fail: an unknown event
+    /// type is not actionable for a client that predates it, and erroring the
+    /// whole stream over a heartbeat bricks every consumer. Streaming callers
+    /// drop these before yielding (see `Responses::create_stream`).
+    #[serde(other)]
+    Unknown,
 }
 
 /// Emitted when there is a partial audio response.
@@ -909,6 +916,21 @@ impl crate::traits::EventType for ResponseStreamEvent {
             Self::ResponseCustomToolCallInputDelta(event) => event.event_type(),
             Self::ResponseCustomToolCallInputDone(event) => event.event_type(),
             Self::ResponseError(event) => event.event_type(),
+            Self::Unknown => "unknown",
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ResponseStreamEvent;
+
+    #[test]
+    fn unknown_event_types_deserialize_instead_of_failing() {
+        // OpenAI emits provider-native keepalive heartbeats; an unknown `type`
+        // must not error the stream.
+        let frame = r#"{"type":"keepalive","sequence_number":2,"model":"gpt-6-astra"}"#;
+        let event: ResponseStreamEvent = serde_json::from_str(frame).unwrap();
+        assert_eq!(event, ResponseStreamEvent::Unknown);
     }
 }

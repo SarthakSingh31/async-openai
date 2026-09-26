@@ -9,6 +9,24 @@ use crate::{
 };
 
 use crate::types::responses::ResponseStream;
+#[cfg(not(feature = "byot"))]
+use crate::types::responses::ResponseStreamEvent;
+#[cfg(not(feature = "byot"))]
+use futures::stream::StreamExt;
+
+/// Drops events this crate cannot model (e.g. provider-native `keepalive`
+/// heartbeats, which deserialize as `ResponseStreamEvent::Unknown`). They carry
+/// no client-actionable payload; yielding them would hand every consumer an
+/// event it cannot interpret.
+#[cfg(not(feature = "byot"))]
+fn drop_unknown_events(stream: ResponseStream) -> ResponseStream {
+    Box::pin(stream.filter_map(|event| async move {
+        match event {
+            Ok(ResponseStreamEvent::Unknown) => None,
+            event => Some(event),
+        }
+    }))
+}
 
 pub struct Responses<'c, C: Config> {
     client: &'c Client<C>,
@@ -66,9 +84,13 @@ impl<'c, C: Config> Responses<'c, C> {
             }
             request.stream = Some(true);
         }
-        self.client
+        let stream = self
+            .client
             .post_stream("/responses", request, &self.request_options)
-            .await
+            .await?;
+        #[cfg(not(feature = "byot"))]
+        let stream = drop_unknown_events(stream);
+        Ok(stream)
     }
 
     /// Retrieves a model response with the given ID.
@@ -95,9 +117,13 @@ impl<'c, C: Config> Responses<'c, C> {
         let mut request_options = self.request_options.clone();
         request_options.with_query(&[("stream", "true")])?;
 
-        self.client
+        let stream = self
+            .client
             .get_stream(&format!("/responses/{}", response_id), &request_options)
-            .await
+            .await?;
+        #[cfg(not(feature = "byot"))]
+        let stream = drop_unknown_events(stream);
+        Ok(stream)
     }
 
     /// Deletes a model response with the given ID.
@@ -162,5 +188,36 @@ impl<'c, C: Config> Responses<'c, C> {
         self.client
             .post("/responses/compact", request, &self.request_options)
             .await
+    }
+}
+
+#[cfg(all(test, not(feature = "byot")))]
+mod tests {
+    use super::*;
+    use crate::types::responses::ResponseErrorEvent;
+
+    #[tokio::test]
+    async fn drop_unknown_events_skips_only_unknown() {
+        let error_event = || {
+            Ok(ResponseStreamEvent::ResponseError(ResponseErrorEvent {
+                sequence_number: None,
+                code: None,
+                message: "boom".into(),
+                param: None,
+            }))
+        };
+        let stream: ResponseStream = Box::pin(futures::stream::iter([
+            Ok(ResponseStreamEvent::Unknown),
+            error_event(),
+            Ok(ResponseStreamEvent::Unknown),
+        ]));
+
+        let collected: Vec<_> = drop_unknown_events(stream).collect().await;
+
+        assert_eq!(collected.len(), 1);
+        assert!(matches!(
+            collected[0],
+            Ok(ResponseStreamEvent::ResponseError(_))
+        ));
     }
 }
